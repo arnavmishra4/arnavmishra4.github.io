@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arnav Mishra — ML / Clinical AI Engineer</title>
+<meta name="description" content="Arnav Mishra — ML engineer building physics-informed and multimodal clinical AI systems, from custom attention mechanisms to production-grade deployments.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="cursor-dot" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-mark">
+      <span class="nav-mark-pulse"></span>
+      A.MISHRA<span class="nav-mark-dim">_ml</span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#pipeline" data-section="pipeline"><span class="nav-idx">01</span>NeuroSight</a>
+      <a href="#projects" data-section="projects"><span class="nav-idx">02</span>Projects</a>
+      <a href="#research" data-section="research"><span class="nav-idx">03</span>Research</a>
+      <a href="#stack" data-section="stack"><span class="nav-idx">04</span>Stack</a>
+      <a href="#contact" data-section="contact"><span class="nav-idx">05</span>Contact</a>
+    </nav>
+    <a class="nav-cta" href="#contact">Get in touch</a>
+    <button class="nav-burger" id="navBurger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <canvas id="signalCanvas" class="hero-canvas"></canvas>
+  <div class="hero-vignette"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow"><span class="dot-live"></span> signal acquired — <span id="signalLabel">MRI T1-CE, patient 0038</span></p>
+    <h1 class="hero-title">
+      Arnav Mishra
+    </h1>
+    <p class="hero-role">
+      ML Engineer building <span class="type-cycle" id="typeCycle"></span>
+    </p>
+    <p class="hero-desc">
+      2.5+ years turning research — custom attention mechanisms, physics-informed
+      architectures, multimodal clinical pipelines — into production systems.
+      1 peer-reviewed IEEE publication, 1 manuscript under review at an Elsevier Q1 journal,
+      and 50+ GB of real-world data processed across deployed systems.
+    </p>
+    <div class="hero-actions">
+      <a href="#pipeline" class="btn btn-primary">
+        <span>Walk the NeuroSight pipeline</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#projects" class="btn btn-ghost">See all projects</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll" aria-hidden="true">
+    <span>scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<!-- ============ STAT STRIP ============ -->
+<section class="stat-strip">
+  <div class="stat-strip-inner">
+    <div class="stat"><span class="stat-num" data-count="5">0</span><span class="stat-label">chained models in NeuroSight</span></div>
+    <div class="stat"><span class="stat-num" data-count="88" data-suffix="%">0</span><span class="stat-label">tumor-segmentation Dice&nbsp;·&nbsp;×100</span></div>
+    <div class="stat"><span class="stat-num" data-count="50" data-suffix="+ GB">0</span><span class="stat-label">real-world data processed</span></div>
+    <div class="stat"><span class="stat-num" data-count="638">0</span><span class="stat-label">longitudinal GBM cases trained on</span></div>
+    <div class="stat"><span class="stat-num" data-count="2">0</span><span class="stat-label">research publications</span></div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="about" id="about">
+  <div class="section-inner about-grid">
+    <div class="about-lead">
+      <p class="eyebrow">// about</p>
+      <h2>I work at both ends of the stack —<br>architecture on one side, deployment on the other.</h2>
+    </div>
+    <div class="about-body">
+      <p>
+        I'm a Data Science graduate (B.Tech, Manipal University Jaipur, 2025) who spent the last
+        two-and-a-half years mostly refusing to stay in one lane: computational oncology, biomedical
+        AI, geospatial ML, generative audio. What ties it together is a habit of pulling architectures
+        apart to first principles — Transformers, ResNets, GCNs, GATs, Seq2Seq — and then rebuilding
+        them for whatever the domain actually needs, whether that's a positional encoding that
+        understands music theory or a PDE constraint that understands tumor growth.
+      </p>
+      <p>
+        The other half of the job is making sure the model survives contact with production: Docker,
+        FastAPI, CI/CD, dynamic batching, GPU-resident inference, confidence calibration, graceful
+        degradation when one stage of a pipeline fails. NeuroSight below is the clearest example of
+        both halves at once.
+      </p>
+      <div class="about-tags">
+        <span>Physics-Informed Neural Networks</span>
+        <span>Multimodal Clinical AI</span>
+        <span>Agentic / RAG Systems</span>
+        <span>Geospatial ML</span>
+        <span>Production MLOps</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PIPELINE : NEUROSIGHT ============ -->
+<section class="pipeline" id="pipeline">
+  <div class="section-inner">
+    <p class="eyebrow">// 01 · flagship system</p>
+    <h2 class="section-title">NeuroSight</h2>
+    <p class="section-sub">
+      A five-model clinical decision-support pipeline for glioblastoma (GBM) — from raw MRI to a
+      grounded clinical hypothesis — with a LangGraph agent orchestrating the whole thing on top.
+      Click a stage to see how it actually works.
+    </p>
+
+    <div class="pipeline-links">
+      <a href="https://huggingface.co/spaces/arnavmishra4/NeuroBio" target="_blank" rel="noopener" class="pipeline-link">
+        <span class="dot-live"></span> Live demo — NeuroBio on HF Spaces
+      </a>
+      <a href="https://huggingface.co/spaces/arnavmishra4/NeuroBio_Agent" target="_blank" rel="noopener" class="pipeline-link">
+        <span class="dot-live"></span> Live demo — NeuroBio Agent on HF Spaces
+      </a>
+      <a href="#" data-config-link="neurosightGithub" target="_blank" rel="noopener" class="pipeline-link pipeline-link-code">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38v-1.49c-2.22.48-2.69-1.07-2.69-1.07-.36-.92-.89-1.16-.89-1.16-.72-.5.06-.49.06-.49.8.06 1.22.82 1.22.82.71 1.22 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.11 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.91.08 2.11.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        Repo
+      </a>
+    </div>
+
+    <div class="stages" id="stages"></div>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section class="projects" id="projects">
+  <div class="section-inner">
+    <p class="eyebrow">// 02 · other systems</p>
+    <h2 class="section-title">Shipped elsewhere</h2>
+    <p class="section-sub">Three more systems, three different domains — geospatial, histopathology, and the H-RPE research that started all of it.</p>
+
+    <div class="project-grid" id="projectGrid"></div>
+  </div>
+</section>
+
+<!-- ============ RESEARCH ============ -->
+<section class="research" id="research">
+  <div class="section-inner">
+    <p class="eyebrow">// 03 · publications</p>
+    <h2 class="section-title">Research</h2>
+    <div class="research-list" id="researchList"></div>
+  </div>
+</section>
+
+<!-- ============ STACK ============ -->
+<section class="stack" id="stack">
+  <div class="section-inner">
+    <p class="eyebrow">// 04 · tools</p>
+    <h2 class="section-title">Stack</h2>
+    <div class="stack-grid" id="stackGrid"></div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="contact" id="contact">
+  <div class="section-inner contact-inner">
+    <p class="eyebrow">// 05 · say hello</p>
+    <h2 class="section-title">Building something in clinical AI<br>or agentic systems? Let's talk.</h2>
+    <div class="contact-links">
+      <a href="mailto:mishraarnav32@gmail.com" class="contact-link contact-link-main">
+        mishraarnav32@gmail.com
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <div class="contact-row">
+        <a href="#" data-config-link="linkedin" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="#" data-config-link="github" target="_blank" rel="noopener">GitHub</a>
+        <a href="#" data-config-link="kaggle" target="_blank" rel="noopener">Kaggle</a>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <span>© <span id="year"></span> Arnav Mishra</span>
+    <span class="footer-dim">Built with HTML / CSS / vanilla JS — no framework, no build step, just GitHub Pages.</span>
+  </footer>
+</section>
+
+<script src="script.js"></script>
+</body>
+</html>
