@@ -20,7 +20,7 @@ const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)
 /* ============================================================
    CONTENT DATA
    ============================================================ */
-const STAGES = [
+const NEUROSIGHT_STAGES = [
   {
     idx: "M1", tag: "Segmentation", name: "3D Attention Res-UNet",
     metric: "0.885 Dice",
@@ -95,44 +95,65 @@ const STAGES = [
 
 const PROJECTS = [
   {
-    kicker: "Geospatial ML · Production System",
-    title: "SONAR 2.0",
-    desc: "A 4-model AI ensemble that fuses satellite imagery, LiDAR elevation, and hydrological data into a single confidence score for ranking candidate archaeological sites.",
+    idx: "01",
+    tag: "Flagship System · Clinical AI",
+    name: "NeuroSight",
+    metric: "5 models + 1 agent",
+    intro: `A five-model clinical decision-support pipeline for glioblastoma (GBM) — from raw
+      MRI to a grounded clinical hypothesis — with a LangGraph agent orchestrating the whole
+      thing on top. Open a model below to see how each stage actually works.`,
+    links: [
+      { label: "Live demo — NeuroBio", href: "https://huggingface.co/spaces/arnavmishra4/NeuroBio", live: true },
+      { label: "Live demo — NeuroBio Agent", href: "https://huggingface.co/spaces/arnavmishra4/NeuroBio_Agent", live: true },
+      { label: "Repo", href: "CONFIG:neurosightGithub" }
+    ],
+    stages: NEUROSIGHT_STAGES
+  },
+  {
+    idx: "02",
+    tag: "Geospatial ML · Production System",
+    name: "SONAR 2.0",
+    metric: "4-model ensemble",
+    intro: "A 4-model AI ensemble that fuses satellite imagery, LiDAR elevation, and hydrological data into a single confidence score for ranking candidate archaeological sites.",
     points: [
       "3-service architecture — React frontend, Node/Express API, Python ML service — behind an nginx reverse proxy with TLS and path-based routing",
       "Dynamic request-batching queue + GPU-resident single-batch inference across the 4-model ensemble, with reusable values pre-computed once at startup",
       "Docker Compose deployment with per-service health checks; processed 50+ GB of satellite and elevation data to surface 135 candidate sites, validated against 18 known reference locations"
     ],
     links: [
-      { label: "Repo", href: "sonarGithub" },
-      { label: "Live demo", href: "sonarDemo" }
+      { label: "Repo", href: "CONFIG:sonarGithub" },
+      { label: "Live demo", href: "CONFIG:sonarDemo" }
     ]
   },
   {
-    kicker: "Computer Vision · Inference Deployment",
-    title: "Lung Cancer Histopathology Classifier",
-    desc: "End-to-end image classification service detecting lung cancer subtypes from histopathology slides, from training through lab-ready deployment.",
+    idx: "03",
+    tag: "Computer Vision · Inference Deployment",
+    name: "Lung Cancer Histopathology Classifier",
+    metric: "99% accuracy",
+    intro: "End-to-end image classification service detecting lung cancer subtypes from histopathology slides, from training through lab-ready deployment.",
     points: [
       "ViT-Base fine-tuned to 99% accuracy across subtypes, then converted from PyTorch to a TensorRT engine for near-real-time inference",
       "TensorRT engine wrapped in a FastAPI service handling preprocessing, inference, and confidence scoring server-side — no local PyTorch setup needed to query it",
       "Fully containerized with Docker; modular CLI built with Optuna + Weights & Biases for reproducible training runs"
     ],
     links: [
-      { label: "Repo", href: "lungGithub" }
+      { label: "Repo", href: "CONFIG:lungGithub" }
     ]
   },
   {
-    kicker: "Generative Audio · Peer-Reviewed",
-    title: "H-RPE Music Generation",
-    desc: "A custom Harmonic Relative Positional Encoding layer built into a two-stage Transformer, enforcing music-theory constraints directly inside attention.",
+    idx: "04",
+    tag: "Generative Audio · Peer-Reviewed",
+    name: "H-RPE Music Generation",
+    metric: "IEEE CCIC 2025",
+    intro: "A custom Harmonic Relative Positional Encoding layer built into a two-stage Transformer, enforcing music-theory constraints directly inside attention.",
     points: [
       "Directional harmonic bias matrices integrated into multi-head attention — constraints live in the mechanism itself, not a post-hoc correction pass",
       "Improved Self-Similarity Matrix Distance (SSMD) over a strong baseline, producing more structurally coherent generated music",
       "Peer-reviewed and accepted at IEEE CCIC 2025"
     ],
     links: [
-      { label: "Paper", href: "hrpePaper" },
-      { label: "Repo", href: "hrpeGithub" }
+      { label: "Paper", href: "CONFIG:hrpePaper" },
+      { label: "Repo", href: "CONFIG:hrpeGithub" }
     ]
   }
 ];
@@ -174,43 +195,127 @@ const ROLES = [
 ];
 
 /* ============================================================
-   RENDER: STAGES
+   LINK RESOLUTION — "CONFIG:key" pulls from CONFIG, else literal URL
    ============================================================ */
-const stagesEl = document.getElementById("stages");
-STAGES.forEach((s, i) => {
+function resolveHref(href){
+  if (typeof href === "string" && href.startsWith("CONFIG:")){
+    return CONFIG[href.slice(7)] || "#";
+  }
+  return href || "#";
+}
+
+/* ============================================================
+   RENDER: unified PROJECTS accordion
+   Every project opens on click to reveal full model/system detail —
+   NeuroSight additionally nests its own per-model sub-accordion.
+   ============================================================ */
+const projectsAccEl = document.getElementById("projectsAccordion");
+
+function recalcAncestorHeight(bodyEl){
+  // walk up to the nearest open acc-body and resync its max-height
+  // now that nested content height has changed
+  const accItem = bodyEl.closest(".acc-item");
+  if (accItem && accItem.classList.contains("open")){
+    const accBody = accItem.querySelector(":scope > .acc-body");
+    if (accBody) accBody.style.maxHeight = accBody.scrollHeight + "px";
+  }
+}
+
+function buildSubStages(container, stages){
+  stages.forEach(s => {
+    const el = document.createElement("div");
+    el.className = "sub-stage";
+    el.innerHTML = `
+      <button class="sub-stage-head" aria-expanded="false">
+        <span class="sub-stage-idx">${s.idx}</span>
+        <span class="sub-stage-head-text">
+          <span class="sub-stage-tag">${s.tag}</span>
+          <span class="sub-stage-name">${s.name}</span>
+        </span>
+        <span class="sub-stage-metric">${s.metric}</span>
+        <span class="sub-stage-chevron">
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </span>
+      </button>
+      <div class="sub-stage-body">
+        <div class="sub-stage-body-inner">
+          <p>${s.body}</p>
+          <div class="sub-stage-chips">${s.chips.map(c => `<span>${c}</span>`).join("")}</div>
+        </div>
+      </div>
+    `;
+    container.appendChild(el);
+
+    const head = el.querySelector(".sub-stage-head");
+    const body = el.querySelector(".sub-stage-body");
+    head.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = el.classList.contains("open");
+      container.querySelectorAll(".sub-stage.open").forEach(other => {
+        if (other !== el){
+          other.classList.remove("open");
+          other.querySelector(".sub-stage-head").setAttribute("aria-expanded", "false");
+          other.querySelector(".sub-stage-body").style.maxHeight = null;
+        }
+      });
+      el.classList.toggle("open", !isOpen);
+      head.setAttribute("aria-expanded", String(!isOpen));
+      body.style.maxHeight = !isOpen ? body.scrollHeight + "px" : null;
+      requestAnimationFrame(() => recalcAncestorHeight(body));
+    });
+  });
+  // open the first model by default
+  container.querySelector(".sub-stage-head")?.click();
+}
+
+PROJECTS.forEach(p => {
   const el = document.createElement("div");
-  el.className = "stage reveal";
+  el.className = "acc-item reveal";
+
+  const linksHtml = p.links.map(l => {
+    const href = resolveHref(l.href);
+    return `<a class="acc-link" href="${href}" target="_blank" rel="noopener">${l.live ? '<span class="dot-live"></span>' : ''}${l.label} ↗</a>`;
+  }).join("");
+
+  const pointsHtml = p.points ? `<ul class="acc-points">${p.points.map(pt => `<li>${pt}</li>`).join("")}</ul>` : "";
+
   el.innerHTML = `
-    <button class="stage-head" aria-expanded="false">
-      <span class="stage-idx">${s.idx}</span>
-      <span class="stage-head-text">
-        <span class="stage-tag">${s.tag}</span>
-        <span class="stage-name">${s.name}</span>
+    <button class="acc-head" aria-expanded="false">
+      <span class="acc-idx">${p.idx}</span>
+      <span class="acc-head-text">
+        <span class="acc-tag">${p.tag}</span>
+        <span class="acc-name">${p.name}</span>
       </span>
-      <span class="stage-metric">${s.metric}</span>
-      <span class="stage-chevron">
+      <span class="acc-metric">${p.metric}</span>
+      <span class="acc-chevron">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
       </span>
     </button>
-    <div class="stage-body">
-      <div class="stage-body-inner">
-        <p>${s.body}</p>
-        <div class="stage-chips">${s.chips.map(c => `<span>${c}</span>`).join("")}</div>
+    <div class="acc-body">
+      <div class="acc-body-inner">
+        <p>${p.intro}</p>
+        ${pointsHtml}
+        <div class="acc-links">${linksHtml}</div>
+        ${p.stages ? '<div class="sub-stages"></div>' : ""}
       </div>
     </div>
   `;
-  stagesEl.appendChild(el);
+  projectsAccEl.appendChild(el);
 
-  const head = el.querySelector(".stage-head");
-  const body = el.querySelector(".stage-body");
+  if (p.stages){
+    buildSubStages(el.querySelector(".sub-stages"), p.stages);
+  }
+
+  const head = el.querySelector(".acc-head");
+  const body = el.querySelector(".acc-body");
   head.addEventListener("click", () => {
     const isOpen = el.classList.contains("open");
-    // close others
-    stagesEl.querySelectorAll(".stage.open").forEach(other => {
-      if (other !== el) {
+    // close other top-level projects
+    projectsAccEl.querySelectorAll(".acc-item.open").forEach(other => {
+      if (other !== el){
         other.classList.remove("open");
-        other.querySelector(".stage-head").setAttribute("aria-expanded", "false");
-        other.querySelector(".stage-body").style.maxHeight = null;
+        other.querySelector(".acc-head").setAttribute("aria-expanded", "false");
+        other.querySelector(".acc-body").style.maxHeight = null;
       }
     });
     el.classList.toggle("open", !isOpen);
@@ -218,32 +323,8 @@ STAGES.forEach((s, i) => {
     body.style.maxHeight = !isOpen ? body.scrollHeight + "px" : null;
   });
 });
-// open the first stage by default
-stagesEl.querySelector(".stage-head")?.click();
-
-/* ============================================================
-   RENDER: PROJECTS
-   ============================================================ */
-const projectGridEl = document.getElementById("projectGrid");
-PROJECTS.forEach(p => {
-  const card = document.createElement("div");
-  card.className = "project-card reveal";
-  card.innerHTML = `
-    <p class="project-kicker">${p.kicker}</p>
-    <h3 class="project-title">${p.title}</h3>
-    <p class="project-desc">${p.desc}</p>
-    <ul class="project-points">${p.points.map(pt => `<li>${pt}</li>`).join("")}</ul>
-    <div class="project-foot">
-      ${p.links.map(l => `<a class="project-link" href="${CONFIG[l.href] || '#'}" target="_blank" rel="noopener">${l.label} ↗</a>`).join("")}
-    </div>
-  `;
-  card.addEventListener("mousemove", e => {
-    const r = card.getBoundingClientRect();
-    card.style.setProperty("--mx", `${e.clientX - r.left}px`);
-    card.style.setProperty("--my", `${e.clientY - r.top}px`);
-  });
-  projectGridEl.appendChild(card);
-});
+// open the first project (NeuroSight) by default, same behavior as before
+projectsAccEl.querySelector(".acc-head")?.click();
 
 /* ============================================================
    RENDER: RESEARCH
@@ -507,7 +588,7 @@ document.querySelectorAll(".reveal:not(.is-visible)").forEach(el => revealObserv
    ============================================================ */
 const navEl = document.getElementById("nav");
 const navLinks = document.querySelectorAll(".nav-links a");
-const sections = ["pipeline", "projects", "research", "stack", "contact"].map(id => document.getElementById(id));
+const sections = ["projects", "research", "stack", "contact"].map(id => document.getElementById(id));
 
 window.addEventListener("scroll", () => {
   navEl.classList.toggle("scrolled", window.scrollY > 40);
